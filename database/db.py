@@ -32,38 +32,6 @@ class Database:
             await self.pool.close()
             logger.info("Database pool closed")
 
-    async def fetch(self, query: str):
-        try:
-            async with self.pool.connection() as conn:
-                async with conn.cursor() as cur:
-                    await cur.execute(query)
-                    logger.info(f"Database fetch\n{query}")
-                    return await cur.fetchall()
-
-        except asyncio.TimeoutError:
-            logger.error("Database query timeout")
-            raise
-
-        except Exception as e:
-            logger.exception(f"Database fetch error: {e}")
-            raise
-
-    async def fetch_one(self, query: str):
-        try:
-            async with self.pool.connection() as conn:
-                async with conn.cursor() as cur:
-                    await cur.execute(query)
-                    logger.info(f"Database fetch one\n{query}")
-                    return await cur.fetchone()
-
-        except asyncio.TimeoutError:
-            logger.error("Database query timeout")
-            raise
-
-        except Exception as e:
-            logger.exception(f"Database fetch one error: {e}")
-            raise
-
     async def execute(self, query: str):
         try:
             async with self.pool.connection() as conn:
